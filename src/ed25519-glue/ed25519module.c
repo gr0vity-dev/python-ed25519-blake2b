@@ -226,7 +226,7 @@ init_ed25519(void)
 
     /* Add some symbolic constants to the module */
     if (BadSignatureError == NULL) {
-        BadSignatureError = PyErr_NewException("ed25519_blake2b.BadSignatureError",
+        BadSignatureError = PyErr_NewException("py_ed25519_blake2b.BadSignatureError",
                                                NULL, NULL);
         if (BadSignatureError == NULL) {
 #if PY_MAJOR_VERSION >= 3

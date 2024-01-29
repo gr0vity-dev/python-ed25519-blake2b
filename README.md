@@ -1,6 +1,8 @@
 Python Bindings to the Ed25519 Digital Signature System (BLAKE2b fork)
 ======================================================================
 
+RE-FORKED FROM "https://github.com/Matoking/python-ed25519-blake2b"
+
 [![Build Status](https://travis-ci.org/Matoking/python-ed25519-blake2b.png?branch=master)](https://travis-ci.org/Matoking/python-ed25519-blake2b)
 
 This fork of [python-ed25519](https://github.com/warner/python-ed25519)
@@ -128,8 +130,8 @@ random data from os.urandom() (although you can provide an alternative
 entropy source with the entropy= argument):
 
 ```python
-import ed25519_blake2b
-signing_key, verifying_key = ed25519_blake2b.create_keypair()
+import py_ed25519_blake2b
+signing_key, verifying_key = py_ed25519_blake2b.create_keypair()
 open("my-secret-key","wb").write(signing_key.to_bytes())
 vkey_hex = verifying_key.to_ascii(encoding="hex")
 print "the public key is", vkey_hex
@@ -144,16 +146,16 @@ later), you can store just the 32 byte seed instead:
 open("my-secret-seed","wb").write(signing_key.to_seed())
 ```
 
-The signing key is an instance of the ed25519_blake2b.SigningKey class. To
+The signing key is an instance of the py_ed25519_blake2b.SigningKey class. To
 reconstruct this instance from a serialized form, the constructor accepts the
 output of either `.to_bytes()` or `.to_seed()`:
 
 ```python
 keydata = open("my-secret-key","rb").read()
-signing_key = ed25519_blake2b.SigningKey(keydata)
+signing_key = py_ed25519_blake2b.SigningKey(keydata)
  
 seed = open("my-secret-seed","rb").read()
-signing_key2 = ed25519_blake2b.SigningKey(seed)
+signing_key2 = py_ed25519_blake2b.SigningKey(seed)
 assert signing_key == signing_key2
 ```
 
@@ -165,7 +167,7 @@ seed:
 import os, hashlib
 master = os.urandom(87)
 seed = hashlib.sha256(master).digest()
-signing_key = ed25519_blake2b.SigningKey(seed)
+signing_key = py_ed25519_blake2b.SigningKey(seed)
 ```
 
 Once you have the SigningKey instance, use its .sign() method to sign a
@@ -178,16 +180,16 @@ print "sig is:", sig
 ```
 
 On the verifying side, the receiver first needs to construct a
-ed25519_blake2b.VerifyingKey instance from the serialized string, then use its
+py_ed25519_blake2b.VerifyingKey instance from the serialized string, then use its
 .verify() method on the signature and message:
 
 ```python
 vkey_hex = b"1246b84985e1ab5f83f4ec2bdf271114666fd3d9e24d12981a3c861b9ed523c6"
-verifying_key = ed25519_blake2b.VerifyingKey(vkey_hex, encoding="hex")
+verifying_key = py_ed25519_blake2b.VerifyingKey(vkey_hex, encoding="hex")
 try:
   verifying_key.verify(sig, b"hello world", encoding="base64")
   print "signature is good"
-except ed25519_blake2b.BadSignatureError:
+except py_ed25519_blake2b.BadSignatureError:
   print "signature is bad!"
 ```
 
@@ -197,7 +199,7 @@ hold just 32 bytes of data and derive everything else from that:
 
 ```python
 keydata = open("my-secret-seed","rb").read()
-signing_key = ed25519_blake2b.SigningKey(keydata)
+signing_key = py_ed25519_blake2b.SigningKey(keydata)
 verifying_key = signing_key.get_verifying_key()
 ```
 
@@ -209,7 +211,7 @@ There is also a basic command-line keygen/sign/verify tool in bin/edsig .
 The complete API is summarized here:
 
 ```python
-sk,vk = ed25519_blake2b.create_keypair(entropy=os.urandom)
+sk,vk = py_ed25519_blake2b.create_keypair(entropy=os.urandom)
 vk = sk.get_verifying_key()
  
 signature = sk.sign(message, prefix=, encoding=)
